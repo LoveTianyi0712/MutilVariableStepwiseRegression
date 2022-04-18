@@ -111,7 +111,7 @@ MultStepwiseReg <- function(datas, params){
     warning("Iteration fails at the beginning, no variable is chosen!")
     
     L_r <- L_0
-    beta_est <- matrix(0, 2, 1)
+    beta_est <- matrix(0, dim_y[2], 1)
     sigma_est <- 1 / (dim_y[1] - sum(flag) - 1) * Lyy
     multiple_cor <- NaN
     for(i in 1:dim_y[2])
@@ -121,7 +121,7 @@ MultStepwiseReg <- function(datas, params){
       Rsquare[i] <-  L_r[idx, idx]
       multiple_cor[i] <- sqrt(1 - L_r[idx, idx] / L_0[idx, idx])
     }
-    beta_est <- cbind(beta_est, Lxy[chosenvar,])
+    beta_est <- cbind(beta_est, t(Lxy[chosenvar,]))
     
     result <- list(
       steptime = steptime,
@@ -196,6 +196,7 @@ MultStepwiseReg <- function(datas, params){
       {
         warning("All the variables are excluded!")
         
+        beta_est <- matrix(0, dim_y[2], 1)
         sigma_est <- 1 / (dim_y[1] - sum(flag) - 1) * Lyy
         multiple_cor <- NaN
         for(i in 1:dim_y[2])
@@ -205,7 +206,7 @@ MultStepwiseReg <- function(datas, params){
           Rsquare[i] <-  L_r[idx, idx]
           multiple_cor[i] <- sqrt(1 - L_r[idx, idx] / L_0[idx, idx])
         }
-        beta_est <- cbind(beta_est, Lxy[chosenvar,])
+        beta_est <- cbind(beta_est, t(Lxy[chosenvar,]))
         
         result <- list(
           steptime = steptime,
@@ -276,7 +277,7 @@ MultStepwiseReg <- function(datas, params){
   }
   
   # give the other necessary result
-  beta_est <- matrix(0, 2, 1)
+  beta_est <- matrix(0, dim_y[2], 1)
   sigma_est <- 1 / (dim_y[1] - sum(flag) - 1) * Lyy
   multiple_cor <- NaN
   Rsquare <- NaN
@@ -288,7 +289,7 @@ MultStepwiseReg <- function(datas, params){
     Rsquare[i] <-  L_r[idx, idx]
     multiple_cor[i] <- sqrt(1 - L_r[idx, idx] / L_0[idx, idx])
   }
-  beta_est <- cbind(beta_est, Lxy[chosenvar,])
+  beta_est <- cbind(beta_est, t(Lxy[chosenvar,]))
   
   # collect the debug information
   result <- list(
